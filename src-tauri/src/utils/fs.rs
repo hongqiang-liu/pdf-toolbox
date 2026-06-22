@@ -42,7 +42,10 @@ pub fn collect_pdf_files(paths: &[PathBuf]) -> Result<Vec<PathBuf>> {
     let mut files = Vec::new();
     for path in paths {
         if path.is_dir() {
-            for entry in WalkDir::new(path).into_iter().filter_map(std::result::Result::ok) {
+            for entry in WalkDir::new(path)
+                .into_iter()
+                .filter_map(std::result::Result::ok)
+            {
                 let entry_path = entry.path();
                 if entry_path.is_file()
                     && entry_path
@@ -66,4 +69,3 @@ pub fn collect_pdf_files(paths: &[PathBuf]) -> Result<Vec<PathBuf>> {
     }
     Ok(files)
 }
-

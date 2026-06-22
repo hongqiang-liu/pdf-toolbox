@@ -3,14 +3,17 @@ use std::path::PathBuf;
 use clap::{Args, Parser, Subcommand, ValueEnum};
 
 use crate::core::{
-    export_images, extract_text, merge_pdfs, split_pdf, ImageExportOptions, ImageFormat,
-    MergeItem, MergeOptions, Result, SplitMode, SplitOptions, TextExtractOptions,
+    export_images, extract_text, merge_pdfs, split_pdf, ImageExportOptions, ImageFormat, MergeItem,
+    MergeOptions, Result, SplitMode, SplitOptions, TextExtractOptions,
 };
 use crate::utils::log::cli_progress;
 
 #[derive(Debug, Parser)]
 #[command(name = "pdf_toolbox")]
-#[command(version, about = "Cross-platform PDF split, merge, text and image toolbox")]
+#[command(
+    version,
+    about = "Cross-platform PDF split, merge, text and image toolbox"
+)]
 struct Cli {
     #[command(subcommand)]
     command: Command,
@@ -189,4 +192,3 @@ pub fn run() -> Result<()> {
 
     Ok(())
 }
-

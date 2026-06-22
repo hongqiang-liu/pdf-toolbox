@@ -30,7 +30,10 @@ pub struct MergeOptions {
 ///     output: "all.pdf".into(),
 /// }, None)?;
 /// ```
-pub fn merge_pdfs(options: MergeOptions, mut progress: Option<ProgressSink<'_>>) -> Result<PathBuf> {
+pub fn merge_pdfs(
+    options: MergeOptions,
+    mut progress: Option<ProgressSink<'_>>,
+) -> Result<PathBuf> {
     if options.items.is_empty() {
         return Err(PdfToolboxError::InvalidArgument(
             "at least one PDF or blank page is required".to_string(),

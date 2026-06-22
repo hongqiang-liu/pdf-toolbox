@@ -7,4 +7,3 @@ pub fn cli_progress(event: ProgressEvent) {
         event.task, percent, event.current, event.total, event.message
     );
 }
-

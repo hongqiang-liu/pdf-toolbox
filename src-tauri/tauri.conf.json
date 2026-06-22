@@ -30,6 +30,9 @@
   "bundle": {
     "active": true,
     "targets": "all",
+    "resources": [
+      "pdfium/**/*"
+    ],
     "icon": [
       "icons/icon.png",
       "icons/icon.ico"

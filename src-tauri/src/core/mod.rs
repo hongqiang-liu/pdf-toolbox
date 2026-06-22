@@ -11,4 +11,3 @@ pub use merge::{merge_pdfs, MergeItem, MergeOptions};
 pub use progress::{ProgressEvent, ProgressSink};
 pub use split::{split_pdf, SplitMode, SplitOptions};
 pub use text::{extract_text, TextExtractOptions};
-

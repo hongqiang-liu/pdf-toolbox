@@ -54,4 +54,3 @@ impl From<lopdf::Error> for PdfToolboxError {
         }
     }
 }
-

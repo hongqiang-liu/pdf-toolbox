@@ -1,5 +1,3 @@
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-
 fn main() {
     let arg_count = std::env::args_os().count();
 
@@ -12,4 +10,3 @@ fn main() {
         pdf_toolbox_lib::tauri_app::run();
     }
 }
-

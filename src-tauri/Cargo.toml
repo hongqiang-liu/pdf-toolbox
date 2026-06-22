@@ -17,7 +17,10 @@ name = "pdf_toolbox"
 path = "src/main.rs"
 
 [build-dependencies]
+flate2 = "1.1"
+tar = "0.4"
 tauri-build = { version = "2.2", features = [] }
+ureq = { version = "2.10", features = ["tls"] }
 
 [dependencies]
 anyhow = "1.0"

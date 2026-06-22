@@ -102,9 +102,11 @@ pub fn export_images(
             )
             .map_err(|err| PdfToolboxError::Pdfium(err.to_string()))?;
         let image = bitmap.as_image();
-        let output = options
-            .output_dir
-            .join(format!("{stem}_page_{:04}.{}", page_number, options.format.extension()));
+        let output = options.output_dir.join(format!(
+            "{stem}_page_{:04}.{}",
+            page_number,
+            options.format.extension()
+        ));
         image
             .save_with_format(&output, options.format.encoder_format())
             .map_err(|err| PdfToolboxError::Task(err.to_string()))?;

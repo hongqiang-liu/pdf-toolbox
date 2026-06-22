@@ -16,7 +16,10 @@ struct TaskResult {
 }
 
 #[tauri::command]
-async fn split_pdf_task(app: tauri::AppHandle, options: SplitOptions) -> Result<TaskResult, PdfToolboxError> {
+async fn split_pdf_task(
+    app: tauri::AppHandle,
+    options: SplitOptions,
+) -> Result<TaskResult, PdfToolboxError> {
     run_background(app, "split", move |progress| {
         split_pdf(options, Some(progress)).map(|paths| {
             paths
@@ -29,10 +32,12 @@ async fn split_pdf_task(app: tauri::AppHandle, options: SplitOptions) -> Result<
 }
 
 #[tauri::command]
-async fn merge_pdf_task(app: tauri::AppHandle, options: MergeOptions) -> Result<TaskResult, PdfToolboxError> {
+async fn merge_pdf_task(
+    app: tauri::AppHandle,
+    options: MergeOptions,
+) -> Result<TaskResult, PdfToolboxError> {
     run_background(app, "merge", move |progress| {
-        merge_pdfs(options, Some(progress))
-            .map(|path| vec![path.to_string_lossy().to_string()])
+        merge_pdfs(options, Some(progress)).map(|path| vec![path.to_string_lossy().to_string()])
     })
     .await
 }
@@ -43,8 +48,7 @@ async fn text_pdf_task(
     options: TextExtractOptions,
 ) -> Result<TaskResult, PdfToolboxError> {
     run_background(app, "text", move |progress| {
-        extract_text(options, Some(progress))
-            .map(|path| vec![path.to_string_lossy().to_string()])
+        extract_text(options, Some(progress)).map(|path| vec![path.to_string_lossy().to_string()])
     })
     .await
 }
@@ -87,7 +91,10 @@ async fn pick_pdf_files(app: tauri::AppHandle) -> Result<Vec<String>, PdfToolbox
 }
 
 #[tauri::command]
-async fn pick_output_file(app: tauri::AppHandle, default_name: String) -> Result<Option<String>, PdfToolboxError> {
+async fn pick_output_file(
+    app: tauri::AppHandle,
+    default_name: String,
+) -> Result<Option<String>, PdfToolboxError> {
     let file = app
         .dialog()
         .file()
@@ -112,7 +119,9 @@ async fn run_background<F>(
     work: F,
 ) -> Result<TaskResult, PdfToolboxError>
 where
-    F: FnOnce(&mut dyn FnMut(ProgressEvent)) -> Result<Vec<String>, PdfToolboxError> + Send + 'static,
+    F: FnOnce(&mut dyn FnMut(ProgressEvent)) -> Result<Vec<String>, PdfToolboxError>
+        + Send
+        + 'static,
 {
     let task_name = task.to_string();
     let app_for_task = app.clone();

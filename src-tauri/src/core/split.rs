@@ -32,11 +32,15 @@ pub struct SplitOptions {
 ///     mode: SplitMode::Ranges { ranges: "1-5,8".into() },
 /// }, None)?;
 /// ```
-pub fn split_pdf(options: SplitOptions, mut progress: Option<ProgressSink<'_>>) -> Result<Vec<PathBuf>> {
+pub fn split_pdf(
+    options: SplitOptions,
+    mut progress: Option<ProgressSink<'_>>,
+) -> Result<Vec<PathBuf>> {
     require_pdf(&options.input)?;
     ensure_dir(&options.output_dir)?;
 
-    let document = Document::load(&options.input).map_err(|err| classify_lopdf_error(err, &options.input))?;
+    let document =
+        Document::load(&options.input).map_err(|err| classify_lopdf_error(err, &options.input))?;
     if document.is_encrypted() {
         return Err(PdfToolboxError::EncryptedPdf(options.input));
     }
