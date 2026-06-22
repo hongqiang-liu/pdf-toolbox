@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF Toolbox</title>
+    <link rel="stylesheet" href="./styles/app.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>PDF Toolbox</h1>
+          <p>拆分、合并、文字提取、高清转图</p>
+        </div>
+        <div class="top-actions">
+          <button id="themeToggle" class="icon-button" title="切换浅色/深色">◐</button>
+        </div>
+      </header>
+
+      <section id="dropZone" class="drop-zone">
+        <div>
+          <strong>拖拽 PDF 到这里</strong>
+          <span>或使用下方按钮选择文件</span>
+        </div>
+        <button id="pickFiles">选择 PDF</button>
+      </section>
+
+      <nav class="tabs" aria-label="PDF功能">
+        <button class="tab active" data-tab="split">PDF分割</button>
+        <button class="tab" data-tab="merge">PDF合并</button>
+        <button class="tab" data-tab="text">文本提取</button>
+        <button class="tab" data-tab="img">PDF转图片</button>
+      </nav>
+
+      <section class="workspace">
+        <aside class="panel files-panel">
+          <div class="panel-heading">
+            <h2>文件列表</h2>
+            <button id="clearFiles" class="small-button">清空</button>
+          </div>
+          <ul id="fileList" class="file-list"></ul>
+        </aside>
+
+        <section class="panel tool-panel">
+          <form id="splitPanel" class="tool-form active">
+            <label>分割模式</label>
+            <select id="splitMode">
+              <option value="range">按页码区间</option>
+              <option value="every">每N页拆分</option>
+              <option value="single">提取单页</option>
+            </select>
+            <label>页码/数量</label>
+            <input id="splitValue" value="1-5,7-12" />
+            <label>输出目录</label>
+            <div class="path-row">
+              <input id="splitOutput" placeholder="请选择输出目录" />
+              <button type="button" data-pick-dir="splitOutput">选择</button>
+            </div>
+            <button type="submit" class="primary">开始分割</button>
+          </form>
+
+          <form id="mergePanel" class="tool-form">
+            <label>合并顺序</label>
+            <div class="row-actions">
+              <button type="button" id="moveUp">上移</button>
+              <button type="button" id="moveDown">下移</button>
+              <button type="button" id="removeFile">删除单项</button>
+              <button type="button" id="addBlank">插入空白页</button>
+            </div>
+            <label>输出 PDF</label>
+            <div class="path-row">
+              <input id="mergeOutput" placeholder="例如 D:\output\all.pdf" />
+              <button type="button" data-pick-file="mergeOutput" data-default="merged.pdf">选择</button>
+            </div>
+            <button type="submit" class="primary">开始合并</button>
+          </form>
+
+          <form id="textPanel" class="tool-form">
+            <label>输出 TXT</label>
+            <div class="path-row">
+              <input id="textOutput" placeholder="例如 D:\output\content.txt" />
+              <button type="button" data-pick-file="textOutput" data-default="content.txt">选择</button>
+            </div>
+            <label class="checkbox-row">
+              <input id="pageMarkers" type="checkbox" checked />
+              <span>输出页面标记</span>
+            </label>
+            <button type="submit" class="primary">提取文本</button>
+          </form>
+
+          <form id="imgPanel" class="tool-form">
+            <label>DPI分辨率</label>
+            <input id="imgDpi" type="number" min="72" max="600" value="300" />
+            <label>图片格式</label>
+            <select id="imgFormat">
+              <option value="png">PNG</option>
+              <option value="jpg">JPG</option>
+            </select>
+            <label>页码范围（可选）</label>
+            <input id="imgPages" placeholder="留空表示全部，例如 1-3,9" />
+            <label>输出目录</label>
+            <div class="path-row">
+              <input id="imgOutput" placeholder="请选择输出目录" />
+              <button type="button" data-pick-dir="imgOutput">选择</button>
+            </div>
+            <button type="submit" class="primary">开始转图</button>
+          </form>
+        </section>
+      </section>
+
+      <section class="panel progress-panel">
+        <div class="panel-heading">
+          <h2>任务进度</h2>
+          <button id="openOutput" class="small-button">打开输出目录</button>
+        </div>
+        <progress id="progressBar" max="100" value="0"></progress>
+        <pre id="logPanel"></pre>
+      </section>
+    </main>
+    <script src="./scripts/app.js"></script>
+  </body>
+</html>
+
