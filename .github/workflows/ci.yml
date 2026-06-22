@@ -32,7 +32,7 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: "1.80"
+          toolchain: stable
           components: rustfmt, clippy
 
       - name: Cache Rust
@@ -77,4 +77,3 @@ jobs:
           name: pdf_toolbox-macos-binary
           path: target/release/pdf_toolbox
           if-no-files-found: error
-
