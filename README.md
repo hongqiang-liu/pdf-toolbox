@@ -46,7 +46,7 @@ pdf_toolbox/
 
 ## 环境要求
 
-- Rust 1.80+
+- Rust 1.85+（依赖链包含 Rust 2024 edition crate，旧版 Cargo 无法解析）
 - Node.js 18+
 - Windows 10/11 或 macOS 10.15+
 - Tauri v2 系统依赖，参考官方文档：https://v2.tauri.app/start/prerequisites/
