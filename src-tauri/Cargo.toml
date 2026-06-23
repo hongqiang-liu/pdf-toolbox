@@ -1,6 +1,6 @@
 [package]
 name = "pdf_toolbox"
-version = "0.1.0"
+version = "0.2.0"
 description = "Cross-platform PDF toolbox with Tauri GUI and Rust CLI"
 authors = ["pdf_toolbox"]
 license = "MIT"
