@@ -9,6 +9,7 @@ permissions:
   contents: write
 
 env:
+  APP_NAME: pdf_toolbox
   CARGO_TERM_COLOR: always
 
 jobs:
@@ -36,16 +37,16 @@ jobs:
         include:
           - label: Windows x64
             os: windows-latest
-            artifact_name: pdf_toolbox-windows-x64.exe
-            binary_path: target/release/pdf_toolbox.exe
-          - label: macOS arm64
-            os: macos-latest
-            artifact_name: pdf_toolbox-macos-arm64
-            binary_path: target/release/pdf_toolbox
+            platform: windows
+            arch: x64
           - label: macOS x64
-            os: macos-13
-            artifact_name: pdf_toolbox-macos-x64
-            binary_path: target/release/pdf_toolbox
+            os: macos-15-intel
+            platform: macos
+            arch: x64
+          - label: macOS arm64
+            os: macos-15
+            platform: macos
+            arch: arm64
 
     steps:
       - name: Checkout
@@ -71,24 +72,43 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
-      - name: Build single binary
-        run: cargo build -p pdf_toolbox --release --locked
+      - name: Build Tauri bundle
+        run: npm run build
 
-      - name: Rename single binary
+      - name: Prepare release files
         shell: bash
         run: |
-          mkdir -p dist
-          cp "${{ matrix.binary_path }}" "dist/${{ matrix.artifact_name }}"
+          set -euo pipefail
 
-      - name: Upload single binary to release
+          VERSION="${GITHUB_REF_NAME#v}"
+          mkdir -p dist
+
+          if [[ "${{ matrix.platform }}" == "windows" ]]; then
+            cp target/release/pdf_toolbox.exe \
+              "dist/${APP_NAME}-${VERSION}-windows-${{ matrix.arch }}-portable.exe"
+
+            INSTALLER="$(find target/release/bundle/nsis -maxdepth 1 -type f -name '*.exe' 2>/dev/null | head -n 1 || true)"
+            if [[ -z "${INSTALLER}" ]]; then
+              echo "Windows installer was not found in target/release/bundle/nsis"
+              exit 1
+            fi
+            cp "${INSTALLER}" \
+              "dist/${APP_NAME}-${VERSION}-windows-${{ matrix.arch }}-setup.exe"
+          fi
+
+          if [[ "${{ matrix.platform }}" == "macos" ]]; then
+            DMG="$(find target/release/bundle/dmg -maxdepth 1 -type f -name '*.dmg' 2>/dev/null | head -n 1 || true)"
+            if [[ -z "${DMG}" ]]; then
+              echo "macOS dmg was not found in target/release/bundle/dmg"
+              exit 1
+            fi
+            cp "${DMG}" \
+              "dist/${APP_NAME}-${VERSION}-macos-${{ matrix.arch }}.dmg"
+          fi
+
+          ls -la dist
+
+      - name: Upload release files
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/${{ matrix.artifact_name }}
-
-      - name: Build Tauri bundle
-        uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          releaseId: ${{ needs.create-release.outputs.release_id }}
-          includeDebug: false
+          files: dist/*

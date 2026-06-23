@@ -16,14 +16,24 @@ env:
 
 jobs:
   rust-and-tauri:
-    name: ${{ matrix.os }}
+    name: ${{ matrix.label }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - windows-latest
-          - macos-latest
+        include:
+          - label: Windows x64
+            os: windows-latest
+            artifact_name: pdf_toolbox-ci-windows-x64-portable
+            artifact_path: target/release/pdf_toolbox.exe
+          - label: macOS x64
+            os: macos-15-intel
+            artifact_name: pdf_toolbox-ci-macos-x64-binary
+            artifact_path: target/release/pdf_toolbox
+          - label: macOS arm64
+            os: macos-15
+            artifact_name: pdf_toolbox-ci-macos-arm64-binary
+            artifact_path: target/release/pdf_toolbox
 
     steps:
       - name: Checkout
@@ -62,18 +72,9 @@ jobs:
       - name: Build release binary
         run: cargo build -p pdf_toolbox --release --locked
 
-      - name: Upload Windows single exe
-        if: runner.os == 'Windows'
+      - name: Upload release binary
         uses: actions/upload-artifact@v4
         with:
-          name: pdf_toolbox-windows-x64-single-exe
-          path: target/release/pdf_toolbox.exe
-          if-no-files-found: error
-
-      - name: Upload macOS binary
-        if: runner.os == 'macOS'
-        uses: actions/upload-artifact@v4
-        with:
-          name: pdf_toolbox-macos-binary
-          path: target/release/pdf_toolbox
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_path }}
           if-no-files-found: error

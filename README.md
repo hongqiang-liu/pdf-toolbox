@@ -115,26 +115,46 @@ src-tauri/target/release/bundle/
 
 仓库已内置 GitHub Actions：
 
-- `.github/workflows/ci.yml`：在 `main` / `master` push 和 Pull Request 上运行 Windows、macOS CI。
-- `.github/workflows/release.yml`：推送 `v*` tag 时自动创建 draft GitHub Release，并上传 Windows 单 exe、macOS 二进制和 Tauri bundle 产物。
+- `.github/workflows/ci.yml`：在 `main` / `master` push 和 Pull Request 上运行 Windows x64、macOS x64、macOS arm64 CI。
+- `.github/workflows/release.yml`：推送 `v*` tag 时自动创建 draft GitHub Release，并上传 Windows x64、macOS x64、macOS arm64 产物。
 - `.github/dependabot.yml`：每周检查 Cargo、npm、GitHub Actions 依赖更新。
 
 发布新版本：
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.2.0
+git push origin v0.2.0
 ```
 
 Release 工作流会生成草稿版本。确认附件和说明无误后，在 GitHub Release 页面手动 Publish。
 
-Windows 单文件产物来自：
+Release 附件命名规则：
 
 ```text
-target/release/pdf_toolbox.exe
+pdf_toolbox-<版本号>-windows-x64-portable.exe
+pdf_toolbox-<版本号>-windows-x64-setup.exe
+pdf_toolbox-<版本号>-macos-x64.dmg
+pdf_toolbox-<版本号>-macos-arm64.dmg
 ```
 
-这个 exe 已嵌入 PDFium，复制单个文件即可运行 CLI 的 `img` / `text` 功能。GUI 模式仍依赖 Windows WebView2 Runtime。macOS 产物默认未签名；公开分发时建议配置 Apple Developer 证书、公证和 Tauri signing secrets。
+例如推送 `v0.2.0` tag 后会生成：
+
+```text
+pdf_toolbox-0.2.0-windows-x64-portable.exe
+pdf_toolbox-0.2.0-windows-x64-setup.exe
+pdf_toolbox-0.2.0-macos-x64.dmg
+pdf_toolbox-0.2.0-macos-arm64.dmg
+```
+
+Windows `portable.exe` 已嵌入 PDFium，复制单个文件即可运行 CLI 的 `img` / `text` 功能；`setup.exe` 是安装版。GUI 模式仍依赖 Windows WebView2 Runtime。macOS 产物默认未签名；公开分发时建议配置 Apple Developer 证书、公证和 Tauri signing secrets。
+
+Release 工作流使用的 GitHub runner：
+
+```text
+windows-latest -> Windows x64
+macos-15-intel -> macOS x64 / Intel
+macos-15       -> macOS arm64 / Apple Silicon
+```
 
 ## 架构说明
 
