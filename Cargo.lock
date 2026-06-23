@@ -2874,7 +2874,7 @@ dependencies = [
  "tauri-build",
  "tauri-plugin-dialog",
  "tauri-plugin-opener",
- "thiserror 1.0.69",
+ "thiserror 2.0.18",
  "tokio",
  "ureq",
  "walkdir",
