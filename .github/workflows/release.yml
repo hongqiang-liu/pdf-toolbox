@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Create release
         id: create_release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           draft: true
           prerelease: ${{ contains(github.ref_name, '-') }}
@@ -109,6 +109,6 @@ jobs:
           ls -la dist
 
       - name: Upload release files
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: dist/*
